@@ -1,0 +1,25 @@
+apiVersion: v1                  
+kind: ReplicationController     
+metadata:                     
+  name: sunnginxrc          
+  labels:    
+    name: sunnginxrc
+spec:                         
+  replicas: 3                
+  selector:                  
+    name:  sunnginx
+  template:                
+    metadata:
+      labels:            
+        name: sunnginx
+    spec:               
+      containers:
+      - name: sunngin112
+        image: registry:5000/sunimages/nginx:1.12
+        env:
+        - name: sunenv1
+          value: sun1
+        - name: sunenv2
+          value: sun2
+        ports:
+        - containerPort: 80
