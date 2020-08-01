@@ -1,0 +1,37 @@
+apiVersion: v1                  
+kind: ReplicationController     
+metadata:                     
+  name: qinnginxrc          
+  labels:    
+    name: qinnginxrc
+spec:                         
+  replicas: 3                
+  selector:                  
+    name:  qinnginx
+  template:                
+    metadata:
+      labels:            
+        name: qinnginx
+    spec:               
+      containers:
+      - name: qinngin112
+        image: registry:5000/sunimages/nginx:1.12
+        env:
+        - name: qinenv1
+          value: qin1
+        - name: qinenv2
+          value: qin2
+        ports:
+        - containerPort: 80
+      - name: qinmysql115
+        image: registry:5000/sunimages/mysql:5.5
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: redhat
+        - name: MYSQL_USER
+          value: qin
+        - name: MYSQL_PASSWORD
+          value: qin
+        ports:
+        - containerPort: 3306
+

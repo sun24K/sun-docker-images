@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kubernetes-dashboard
+  namespace: kube-system			该命名空间系统预留,用于存放系统管理类的pod,插件,资源等
+  labels:
+    k8s-app: kubernetes-dashboard
+    kubernetes.io/cluster-service: "true"
+spec:
+  selector: 
+    matchLabels:
+      k8s-app: kubernetes-dashboard
+  template:
+    metadata:
+      labels:
+        k8s-app: kubernetes-dashboard
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+        scheduler.alpha.kubernetes.io/tolerations: '[{"key":"CriticalAddonsOnly","operator":"Exists"}]'
+    spec:
+      containers:
+      - name: kubernetes-dashboard
+        image: registry:5000/sunimages/kubernetes-dashboard-amd64:v1.8.3		改成本地镜像
+        resources:					资源限制,可不加
+          limits:
+            cpu: 100m
+            memory: 50Mi
+          requests:
+            cpu: 100m
+            memory: 50Mi
+        ports:
+        - containerPort: 9090
+        args:						指定apiserver,加参数
+          - --apiserver-host=http://192.168.137.100:8080			指定master的ip地址,直接写master无法解析,因为是集群内部,后期通过这个方式后加/ui的方式访问dashboard
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 9090
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+
+资源查看
+kubectl get deployment -n kube-system
+
+
