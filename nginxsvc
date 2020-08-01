@@ -1,0 +1,14 @@
+kind: Service 
+metadata:
+  name: sunnginxsvc
+  labels:
+    name: sunnginxsvc
+spec:
+  type: NodePort
+  ports: 
+  - port: 18888
+    targetPort: 80
+    protocol: TCP
+    nodePort: 28888
+  selector:
+    name: sunnginx
